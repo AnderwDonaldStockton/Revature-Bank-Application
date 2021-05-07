@@ -83,4 +83,7 @@ update "BankAppAccount" set "balance" = 100 where "id" = 20;
 insert into "BankAppAccount" ("balance") values 100 where "id" = 20;
 
 
+Select id,name,email,join_date,password from "BankAppUser" where email = 'asdf';
 
+Select name,id from "BankAppAccount" where (fk_customer_id = 6 and name = 'Checking');
+Select name,id from "BankAppAccount" where (fk_customer_id = 6 and name = 'Savings');

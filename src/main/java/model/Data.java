@@ -9,7 +9,7 @@ public class Data {
 	private String password; //
 	private String joinDate; // user level: for determining
 	private String transactionType; // transaction level: is it a withdraw or deposit
-	private int amount; // transaction & account level: amount deposited or withdrawn
+	private float amount; // transaction & account level: amount deposited or withdrawn
 	private String description; // transaction level: description
 	private int accountId; // transaction level: used for the account ID
 	private int oldAmount; // account level: previous amount in the account
@@ -22,8 +22,8 @@ public class Data {
 //	public Data(String accountType) {
 //		this.setAccountType(accountType);
 //	}
-
-	public Data(int amount, int accountId, int oldAmount) { // for a deposit or withdrawal
+	// example of overloading
+	public Data(float amount, int accountId, int oldAmount) { // for a deposit or withdrawal
 		this.accountId = accountId;
 		this.amount = amount;
 		this.oldAmount = oldAmount;
@@ -56,7 +56,7 @@ public class Data {
 	}
 
 	// this one is used for making the deposit or withdrawal
-	public Data(String description, int amount, String transactionType, int accountId) {
+	public Data(String description, float amount, String transactionType, int accountId) {
 		this.description = description;
 		this.amount = amount;
 		this.transactionType = transactionType;
@@ -111,11 +111,11 @@ public class Data {
 		this.joinDate = joinDate;
 	}
 
-	public int getAmount() {
+	public float getAmount() {
 		return amount;
 	}
 
-	public void setAmount(int amount) {
+	public void setAmount(float amount) {
 		this.amount = amount;
 	}
 

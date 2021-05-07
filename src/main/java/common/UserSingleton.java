@@ -20,10 +20,6 @@ public class UserSingleton {
 		
 	}
 	
-	
-	
-	
-	
 	public void storeDataUS(Data data) {
 	}
 	

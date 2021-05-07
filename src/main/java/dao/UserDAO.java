@@ -29,16 +29,15 @@ public class UserDAO {
 		PreparedStatement pstmt = con.prepareStatement(inDatabase);
 
 		pstmt.setString(1, AccountEmail); // do logic check if the email is in the
-
+		
 		ResultSet rs = pstmt.executeQuery();
 
 		while (rs.next()) { // get the data from the users contact list
-			Integer DatabaseId = rs.getInt("id");
+			int DatabaseId = rs.getInt("id");
 			String DatabaseName = rs.getString("name");
 			String DatabaseEmail = rs.getString("email");
 			String DatabaseJoinDate = rs.getString("join_date");
 			String DatanasePassword = rs.getString("password");
-
 			// make a new object in java to store the data in the database
 			userinfo.add(new Data(DatabaseId, DatabaseName, DatabaseEmail, DatabaseJoinDate, DatanasePassword));
 		}
@@ -86,6 +85,8 @@ public class UserDAO {
 						+ "      values (pg_catalog.clock_timestamp(),                 ?,               ?,         ?,             (select id from \"BankAppAccount\" where \"id\" = ?));";
 			} else if (selector == 5) {
 				inDatabase = "update \"BankAppAccount\" set \"balance\" = ? where \"id\" = ?;";
+			} else if (selector == 6) {
+				inDatabase = "update \"BankAppAccount\" set \"balance\" = ? where \"id\" = ?;";
 			}
 
 			PreparedStatement pstmt = con.prepareStatement(inDatabase); // be able to store the data into the database
@@ -98,7 +99,7 @@ public class UserDAO {
 			} else if (selector == 2) {
 				pstmt.setString(1, data.getName()); // set the entered name in the database
 				pstmt.setInt(2, 0); // set the initial balance in the database
-				System.out.println("email: " + data.getEmail());
+//				System.out.println("email: " + data.getEmail());
 				pstmt.setString(3, data.getEmail()); // link the email in the database
 			} else if (selector == 3) {
 				pstmt.setString(1, data.getName()); // set the entered name in the database
@@ -107,11 +108,14 @@ public class UserDAO {
 				pstmt.setString(4, data.getEmail()); // link the email in the database
 			} else if (selector == 4) {
 				pstmt.setString(1, data.getDescription()); // set the entered desc in the database
-				pstmt.setInt(2, data.getAmount());
+				pstmt.setFloat(2, data.getAmount());
 				pstmt.setString(3, data.getTransactionType()); // set the initial balance in the database
-				pstmt.setInt(5, data.getAccountId()); // link the email in the database
+				pstmt.setInt(4, data.getAccountId()); // link the email in the database
 			} else if (selector == 5) { // this chuck here adds transaction amount to selected account
-				pstmt.setInt(1, data.getOldAmount() + data.getAmount()); // add the two amounts up and store into
+				pstmt.setFloat(1, data.getOldAmount() + data.getAmount()); // add the two amounts up and store into
+				pstmt.setInt(2, data.getAccountId());
+			} else if (selector == 6) { // this chuck here adds transaction amount to selected account
+				pstmt.setFloat(1, data.getOldAmount() - data.getAmount()); // add the two amounts up and store into
 				pstmt.setInt(2, data.getAccountId());
 			}
 
@@ -160,7 +164,7 @@ public class UserDAO {
 		return previousBalance;
 	}
 
-	public List<Integer> displayCheckingAndSavings(Data data) {
+	public List<Integer> displayCheckingAndSavings(Data data, boolean selector) {
 		String userInfo = null;
 		int userID = 0;
 		int accountID = 0;
@@ -179,18 +183,36 @@ public class UserDAO {
 				userID = rs1.getInt("id"); // now I have the id from the database
 			}
 
-			inDatabase = "Select name,id from \"BankAppAccount\" where (fk_customer_id = ? and name = ? or name = ?);";
+			//this is for printing the checking account
+			inDatabase = "Select name,id from \"BankAppAccount\" where (fk_customer_id = ? and name = ?);";
 			PreparedStatement pstmt2 = con.prepareStatement(inDatabase);
 			pstmt2.setInt(1, userID);
-			pstmt2.setString(2, Savings);
-			pstmt2.setString(3, Checking);
+			pstmt2.setString(2, Checking);
 			ResultSet rs2 = pstmt2.executeQuery();
 			while (rs2.next()) {
 				userInfo = rs2.getString("name");
 				accountID = rs2.getInt("id");
-				System.out.println(userInfo + " ID: " + accountID); // printing out each account the user has
+				if (selector == true) {
+					System.out.println(userInfo + " ID: " + accountID); // printing out each account the user has
+				}
 				userIdList.add(accountID); // add the account number to the output list
 			}
+
+			//this is for printing the savings accounts
+			inDatabase = "Select name,id from \"BankAppAccount\" where (fk_customer_id = ? and name = ?);";
+			PreparedStatement pstmt3 = con.prepareStatement(inDatabase);
+			pstmt3.setInt(1, userID);
+			pstmt3.setString(2, Savings);
+			ResultSet rs3 = pstmt3.executeQuery();
+			while (rs3.next()) {
+				userInfo = rs3.getString("name");
+				accountID = rs3.getInt("id");
+				if (selector == true) {
+					System.out.println(userInfo + " ID: " + accountID); // printing out each account the user has
+				}
+				userIdList.add(accountID); // add the account number to the output list
+			}
+			
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
