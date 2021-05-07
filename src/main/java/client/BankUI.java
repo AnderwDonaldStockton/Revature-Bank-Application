@@ -289,7 +289,7 @@ public class BankUI {
 			System.out.println("1.  Checking");
 			System.out.println("2.  Savings");
 		} else if (a == 3) {
-			System.out.println("\n" + "do you wish to add another Savings account y/n");
+			System.out.println("\n" + "do you wish to add a Savings account y/n");
 		} else if (a == 4) {
 			System.out.println("\n" + "a checking account exists allready");
 			System.out.println("only one checking account can be made");
@@ -332,6 +332,8 @@ public class BankUI {
 			System.out.println("\n" + "Do you wish to make another withdrawal? (y/n)");
 		} else if (a == 18) {
 			System.out.println("\n" + "insuficient funds in your checking account");
+		} else if (a == 19) {
+			System.out.println("\n" + "money has been dispensed");
 		}
 		
 	}
@@ -427,7 +429,7 @@ public class BankUI {
 			if (amountInAccount < withdrawAmount) {
 				actionsDisplayScreen(16); // reject the entered amount for the specific account
 			}
-			
+			actionsDisplayScreen(19);		// money has been dispensed
 			
 		} else if (selector == 2) {			// Here for other amount withdraw
 			do {							// for continually withdrawing
@@ -477,6 +479,7 @@ public class BankUI {
 					returnOfTransaction = accountObject.addItem(new Data(description, withdrawAmount, withdraw, accountSelected), 4); // returnOfTransaction is the amount in the selected account
 					f = accountObject.addItem(new Data(withdrawAmount, accountSelected, amountInAccount ), 6); // update the account with the transaction
 				}
+				actionsDisplayScreen(19);		// money has been dispensed
 				d = continueAnotherAccountAdd(input, true, 17); // check if user wants to make another deposit
 			} while (h != true && f != true && d != true && returnOfTransaction != true);
 		}
